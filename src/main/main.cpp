@@ -7,8 +7,8 @@
 
 
 int main() {
-  const size_t n = 1000;
-  const size_t k = 10;
+  const size_t n = 2000;
+  const size_t k = 1000;
   std::vector<double> signal(n, 0);
   size_t ic = 0;
   for(auto & item : signal) item = (double)ic++ / n;

@@ -3,6 +3,7 @@
 #include <list>
 #include <functional>
 #include <unordered_map>
+#include <omp.h>
 
 namespace math {
   const double pi = acos(-1);
@@ -72,7 +73,9 @@ void DiscreteFourierTransform(double* data, ComplexArray* output, size_t end_n, 
   
   std::complex<double> i = {0, 1};
   const size_t N = end_n - 1;
-  for(size_t k = 0; k < end_k; ++k)
+
+  #pragma omp parallel for schedule(static)
+  for(int k = 0; k < end_k; ++k)
   {
     std::complex<double> sum = {0, 0};
     for(size_t n = 0; n < end_n; ++n)
