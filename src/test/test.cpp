@@ -5,7 +5,7 @@ const size_t n = 1000;
 const size_t k = 10;
 
 // Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
+TEST(DFT_Non_OpenMP, Correctness_test) {
 
   std::vector<double> signal(n, 0);
   size_t ic = 0;
