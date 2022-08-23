@@ -2,31 +2,35 @@
 #include <vector>
 #include <list>
 #include <iterator>
+#include <random>
 #include <algorithm>
+#include <chrono>
 #include "lib.h"
 
 
 int main() {
-  const size_t n = 2000;
-  const size_t k = 1000;
+  const size_t n = 8000;
+  const size_t k = 4000;
+  std::mt19937 rg(time(0));
+
   std::vector<double> signal(n, 0);
   size_t ic = 0;
   for(auto & item : signal) item = (double)ic++ / n;
 
-  auto sin5 = math::get_sin(5);
-  auto sin2 = math::get_sin(2);
-  auto sin7 = math::get_sin(7);
+  auto sin1 = math::get_sin(rg() % 50);
+  auto sin2 = math::get_sin(rg() % 50);
+  auto sin3 = math::get_sin(rg() % 50);
 
-  for(auto & item : signal) item = sin5(item) + sin2(item) + sin7(item);
+  for(auto & item : signal) item = sin1(item) + sin2(item) + sin3(item);
   auto ca = ComplexArray(k);
-  DiscreteFourierTransform(signal.data(), &ca, n, k);
 
+  auto start = std::chrono::high_resolution_clock::now();
+  DiscreteFourierTransform(signal.data(), &ca, n, k);
+  auto end = std::chrono::high_resolution_clock::now();
+
+  std::cout <<  std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
 
   auto res = ca.get_freq(n);
-  for(size_t i = 0; i < k; ++i){
-    std::cout << i << " Hz: " << ca.get(i) << std::endl;
-  }
-
   std::cout << "Found\n";
   for (auto c : res) {
     std::cout << c << "Hz ";
